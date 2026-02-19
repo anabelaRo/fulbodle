@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply bg-slate-950 text-slate-100 antialiased; font-family: 'Inter', sans-serif; }
+}
+
+@layer components {
+  .flip-card { animation: flip 0.6s ease-in-out; }
+  @keyframes flip {
+    0% { transform: rotateX(0deg); }
+    50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+  .stat-box { @apply aspect-square flex flex-col items-center justify-center border text-center transition-all duration-500; }
+}
