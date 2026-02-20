@@ -88,7 +88,7 @@ export default function App() {
       const fund = guess.fundacion === targetTeam.fundacion ? "🟩" : "⬛";
       return `${pais}${fed}${cat}${col}${palm}${fund}`;
     }).join('\n');
-    const shareText = `Fulbodle ⚽\nIntento: ${gameStatus === 'won' ? guesses.length : 'X'}/7\n${emojiGrid}\n${window.location.href}`;
+    const shareText = `Fulbodle ⚽\nIntento: ${gameStatus === 'won' ? guesses.length : 'X'}/5\n${emojiGrid}\n${window.location.href}`;
     if (navigator.share) navigator.share({ title: 'Fulbodle', text: shareText }).catch(() => {});
     else { navigator.clipboard.writeText(shareText); alert("¡Copiado al portapapeles! 📋"); }
   };
@@ -116,6 +116,17 @@ export default function App() {
               </div>
               <Autocomplete suggestions={teams} onSelect={handleGuess} disabled={gameStatus !== "playing"} uiColor={uiColor} />
             </div>
+
+            {/* ENCABEZADOS DE COLUMNAS */}
+            {guesses.length > 0 && (
+              <div className="grid grid-cols-6 gap-1 mb-2 px-1">
+                {['País', 'Conf.', 'Cat.', 'Color', 'Ligas', 'Año'].map((h) => (
+                  <div key={h} className="text-[8px] font-black text-slate-400 text-center uppercase tracking-tighter">
+                    {h}
+                  </div>
+                ))}
+              </div>
+            )}
 
             <div className="space-y-6">
               {guesses.map((g) => <GuessRow key={g.id} guess={g} target={targetTeam} />).reverse()}
