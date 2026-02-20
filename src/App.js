@@ -129,7 +129,7 @@ export default function App() {
           <>
             <div className="mb-8">
               <div className="flex justify-between items-center mb-4 px-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Elegí tu equipo:</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Adiviná el equipo:</span>
                 <button onClick={() => setShowRules(true)} className="text-slate-400 hover:text-slate-900 transition-colors">
                   <Info size={20}/>
                 </button>
@@ -177,12 +177,7 @@ export default function App() {
                 </div>
               )).reverse()
             )}
-            <div className="mt-8 p-6 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 text-center">
-                <p className="text-slate-500 text-sm font-bold mb-4 italic">¿Te gusta el proyecto?</p>
-                <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#ffdd00] text-black px-6 py-3 rounded-xl font-black shadow-md hover:scale-105 transition-transform">
-                    <Coffee size={20} /> INVITAME UN CAFECITO
-                </a>
-            </div>
+         
           </div>
         )}
       </main>
