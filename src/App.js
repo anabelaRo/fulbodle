@@ -122,6 +122,9 @@ export default function App() {
           <Trophy size={18} className="text-amber-400" />
           <span>{stats.streak}</span>
         </div>
+       <p className="text-[11px] mt-2 font-medium text-white/60 italic leading-tight max-w-[250px]">
+       Un equipo secreto cada día, cinco intentos:  ¿Podes sacarlo?
+       </p>
       </header>
 
       <main className="main-container flex-grow p-6">
