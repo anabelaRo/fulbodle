@@ -1,17 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  body { @apply bg-slate-950 text-slate-100 antialiased; font-family: 'Inter', sans-serif; }
+  body { 
+    background-color: #396145;
+    @apply text-slate-900 antialiased font-['Outfit'];
+  }
 }
 
 @layer components {
-  .flip-card { animation: flip 0.6s ease-in-out; }
-  @keyframes flip {
-    0% { transform: rotateX(0deg); }
-    50% { transform: rotateX(90deg); }
-    100% { transform: rotateX(0deg); }
+  .main-container {
+    @apply bg-[#fdfcf8] rounded-[2rem] shadow-2xl border-b-8 border-black/20;
   }
-  .stat-box { @apply aspect-square flex flex-col items-center justify-center border text-center transition-all duration-500; }
+
+  /* Relación 2:1 exacta para los cuadros de resultados */
+  .stat-box {
+    @apply flex flex-col items-center justify-center border-2 rounded-xl text-center transition-all duration-500 shadow-sm p-1 overflow-hidden;
+    aspect-ratio: 2 / 1; 
+    width: 100%;
+  }
+
+  /* Colores de estados */
+  .box-correct { @apply bg-[#218c57] border-[#1a6d44] text-white shadow-[0_3px_0_0_#145334]; }
+  .box-partial { @apply bg-[#f2a641] border-[#d48a2b] text-white shadow-[0_3px_0_0_#a66b21]; }
+  .box-wrong { @apply bg-[#e5e7eb] border-[#d1d5db] text-slate-400 shadow-[0_3px_0_0_#9ca3af]; }
+
+  .flip-card {
+    animation: flip 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  }
+
+  @keyframes flip {
+    0% { transform: rotateX(-90deg); opacity: 0; }
+    100% { transform: rotateX(0deg); opacity: 1; }
+  }
 }
+
+::-webkit-scrollbar { display: none; }
