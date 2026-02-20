@@ -96,7 +96,7 @@ const shareResult = () => {
       : `Tristeza não tem fim. No pude adivinar el equipo hoy ❌`;
 
     // 3. Armamos el texto final
-    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.netlify.app`;
+    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.vercel.app/`;
 
     // 4. Lógica de copiado/compartido
     if (navigator.share) {
