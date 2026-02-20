@@ -225,34 +225,34 @@ export default function App() {
         </div>
       )}
 
-      <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[280px] h-16 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-6 border-b-4 border-black/20 z-40`}>
-        {/* Botón Home */}
-        <button 
-          onClick={() => setView("game")} 
-          className={`${view === 'game' ? 'text-white scale-110' : 'text-white/40'} transition-all`}
-        >
-          <Home size={24}/>
-        </button>
-      
-        {/* BOTÓN CAFECITO (Central y destacado) */}
-        <a 
-          href="https://cafecito.app/anabelaro" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="bg-[#ffdd00] p-3 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all -translate-y-1"
-          title="Invitame un Cafecito"
-        >
-          <Coffee size={24} className="text-black" />
-        </a>
-      
-        {/* Botón Historial */}
-        <button 
-          onClick={() => setView("history")} 
-          className={`${view === 'history' ? 'text-white scale-110' : 'text-white/40'} transition-all`}
-        >
-          <History size={24}/>
-        </button>
-      </nav>
+     <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[240px] h-14 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-4 border-b-4 border-black/20 z-40`}>
+      {/* 1. Botón Home (Izquierda) */}
+      <button 
+        onClick={() => setView("game")} 
+        className={`${view === 'game' ? 'text-white scale-110' : 'text-white/40'} transition-all duration-200`}
+      >
+        <Home size={24}/>
+      </button>
+    
+      {/* 2. Botón Historial (Centro) */}
+      <button 
+        onClick={() => setView("history")} 
+        className={`${view === 'history' ? 'text-white scale-110' : 'text-white/40'} transition-all duration-200`}
+      >
+        <History size={24}/>
+      </button>
+    
+      {/* 3. Botón Cafecito (Derecha) */}
+      <a 
+        href="https://cafecito.app/anabelaro" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        className="text-white/40 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95"
+        title="Invitame un Cafecito"
+      >
+        <Coffee size={24} />
+      </a>
+    </nav>
     </div>
   );
 }
