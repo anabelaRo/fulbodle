@@ -79,13 +79,13 @@ export default function App() {
 
   const shareResult = () => {
     const emojiGrid = guesses.map(guess => {
-      const pais = guess.pais === targetTeam.pais ? "🟩" : "⬛";
-      const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬛";
-      const cat = guess.categoria === targetTeam.categoria ? "🟩" : "⬛";
+      const pais = guess.pais === targetTeam.pais ? "🟩" : "⬜";
+      const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬜";
+      const cat = guess.categoria === targetTeam.categoria ? "🟩" : "⬜";
       const matches = guess.colores.filter(c => targetTeam.colores.includes(c)).length;
-      let col = (matches === targetTeam.colores.length && guess.colores.length === targetTeam.colores.length) ? "🟩" : (matches > 0 ? "🟨" : "⬛");
-      const palm = guess.palmares === targetTeam.palmares ? "🟩" : "⬛";
-      const fund = guess.fundacion === targetTeam.fundacion ? "🟩" : "⬛";
+      let col = (matches === targetTeam.colores.length && guess.colores.length === targetTeam.colores.length) ? "🟩" : (matches > 0 ? "🟨" : "⬜");
+      const palm = guess.palmares === targetTeam.palmares ? "🟩" : "⬜";
+      const fund = guess.fundacion === targetTeam.fundacion ? "🟩" : "⬜";
       return `${pais}${fed}${cat}${col}${palm}${fund}`;
     }).join('\n');
 
@@ -202,7 +202,7 @@ export default function App() {
                 <p className="text-xs text-slate-500"><b className="text-black">Parcial:</b> El club tiene este color (pero hay más).</p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white">⬛</div>
+                <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white">⬜</div>
                 <p className="text-xs text-slate-500"><b className="text-black">Incorrecto:</b> No hay coincidencia.</p>
               </div>
             </div>
