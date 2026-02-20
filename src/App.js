@@ -93,7 +93,7 @@ export default function App() {
       ? `¡GOLAZO! Adiviné en ${guesses.length}/5 intentos ⚽` 
       : `FINAL DEL PARTIDO. No pude adivinar hoy ❌`;
 
-    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.netlify.app`;
+    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.vercel.app/`;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
