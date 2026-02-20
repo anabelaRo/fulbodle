@@ -77,7 +77,8 @@ export default function App() {
     }));
   };
 
-  const shareResult = () => {
+const shareResult = () => {
+    // 1. Generamos la grilla de emojis (mantenemos tu lógica de colores)
     const emojiGrid = guesses.map(guess => {
       const pais = guess.pais === targetTeam.pais ? "🟩" : "⬛";
       const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬛";
@@ -88,11 +89,24 @@ export default function App() {
       const fund = guess.fundacion === targetTeam.fundacion ? "🟩" : "⬛";
       return `${pais}${fed}${cat}${col}${palm}${fund}`;
     }).join('\n');
-    const shareText = `Fulbodle ⚽\nIntento: ${gameStatus === 'won' ? guesses.length : 'X'}/5\n${emojiGrid}\n${window.location.href}`;
-    if (navigator.share) navigator.share({ title: 'Fulbodle', text: shareText }).catch(() => {});
-    else { navigator.clipboard.writeText(shareText); alert("¡Copiado al portapapeles! 📋"); }
-  };
 
+    // 2. Definimos la leyenda personalizada
+    const mensajeResultado = gameStatus === 'won' 
+      ? `¡GOLAZO! Adiviné el equipo en ${guesses.length}/5 intentos ⚽` 
+      : `Tristeza não tem fim. No pude adivinar el equipo hoy ❌`;
+
+    // 3. Armamos el texto final
+    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.netlify.app`;
+
+    // 4. Lógica de copiado/compartido
+    if (navigator.share) {
+      navigator.share({ title: 'Fulbodle', text: shareText }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(shareText);
+      alert("¡Resultado copiado al portapapeles! 📋");
+    }
+  };
+  
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col p-4 pb-32">
       <header className="flex justify-between items-center py-6 px-2 text-white">
