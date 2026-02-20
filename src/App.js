@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { teams } from './data/teams';
 import GuessRow from './components/GuessRow';
 import Autocomplete from './components/Autocomplete';
-import { Trophy, History, Home, Share2, Info, X } from 'lucide-react';
+import { Trophy, History, Home, Share2, Info, X, Coffee } from 'lucide-react';
 
 const LOSING_MESSAGES = [
   "La próxima pedí el VAR, capaz te dan por válida la respuesta.",
@@ -21,7 +21,7 @@ export default function App() {
   const [showRules, setShowRules] = useState(false);
   const [loseMessage, setLoseMessage] = useState("");
 
-  const uiColor = "bg-[#4a5c4e]"; // Verde ceniza para UI
+  const uiColor = "bg-[#4a5c4e]"; 
 
   useEffect(() => {
     const today = new Date();
@@ -77,8 +77,7 @@ export default function App() {
     }));
   };
 
-const shareResult = () => {
-    // 1. Generamos la grilla de emojis (mantenemos tu lógica de colores)
+  const shareResult = () => {
     const emojiGrid = guesses.map(guess => {
       const pais = guess.pais === targetTeam.pais ? "🟩" : "⬛";
       const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬛";
@@ -90,23 +89,22 @@ const shareResult = () => {
       return `${pais}${fed}${cat}${col}${palm}${fund}`;
     }).join('\n');
 
-    // 2. Definimos la leyenda personalizada
     const mensajeResultado = gameStatus === 'won' 
-      ? `¡GOLAZO! Adiviné el equipo en ${guesses.length}/5 intentos ⚽` 
-      : `Tristeza não tem fim. No pude adivinar el equipo hoy ❌`;
+      ? `¡GOLAZO! Adiviné en ${guesses.length}/5 intentos ⚽` 
+      : `FINAL DEL PARTIDO. No pude adivinar hoy ❌`;
 
-    // 3. Armamos el texto final
-    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.vercel.app/`;
+    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.netlify.app`;
 
-    // 4. Lógica de copiado/compartido
-    if (navigator.share) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile && navigator.share) {
       navigator.share({ title: 'Fulbodle', text: shareText }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
       alert("¡Resultado copiado al portapapeles! 📋");
     }
   };
-  
+
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col p-4 pb-32">
       <header className="flex justify-between items-center py-6 px-2 text-white">
@@ -126,18 +124,17 @@ const shareResult = () => {
             <div className="mb-8">
               <div className="flex justify-between items-center mb-4 px-1">
                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Elegí tu equipo:</span>
-                <button onClick={() => setShowRules(true)} className="text-slate-400 hover:text-slate-900"><Info size={16}/></button>
+                <button onClick={() => setShowRules(true)} className="text-slate-400 hover:text-slate-900 transition-colors">
+                  <Info size={20}/>
+                </button>
               </div>
               <Autocomplete suggestions={teams} onSelect={handleGuess} disabled={gameStatus !== "playing"} uiColor={uiColor} />
             </div>
 
-            {/* ENCABEZADOS DE COLUMNAS */}
             {guesses.length > 0 && (
               <div className="grid grid-cols-6 gap-1 mb-2 px-1">
                 {['País', 'Conf.', 'Cat.', 'Color', 'Ligas', 'Año'].map((h) => (
-                  <div key={h} className="text-[8px] font-black text-slate-400 text-center uppercase tracking-tighter">
-                    {h}
-                  </div>
+                  <div key={h} className="text-[8px] font-black text-slate-400 text-center uppercase tracking-tighter">{h}</div>
                 ))}
               </div>
             )}
@@ -162,89 +159,71 @@ const shareResult = () => {
         ) : (
           <div className="space-y-4">
             <h2 className="text-xl font-black italic uppercase text-slate-900">Historial</h2>
-            {stats.history.map((h, i) => (
-              <div key={i} className="p-4 bg-slate-50 rounded-2xl flex justify-between border border-slate-100 items-center">
-                <span className="font-bold text-sm uppercase">{h.team}</span>
-                <span className={`text-[10px] font-black px-3 py-1 rounded-full ${h.result === 'won' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                  {h.result === 'won' ? 'GANADO' : 'PERDIDO'}
-                </span>
-              </div>
-            )).reverse()}
+            {stats.history.length === 0 ? (
+              <p className="text-slate-400 text-sm italic">Aún no jugaste ningún partido.</p>
+            ) : (
+              stats.history.map((h, i) => (
+                <div key={i} className="p-4 bg-slate-50 rounded-2xl flex justify-between border border-slate-100 items-center">
+                  <span className="font-bold text-sm uppercase">{h.team}</span>
+                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${h.result === 'won' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                    {h.result === 'won' ? 'GANADO' : 'PERDIDO'}
+                  </span>
+                </div>
+              )).reverse()
+            )}
+            
+            <div className="mt-8 p-6 bg-amber-50 rounded-[2rem] border-2 border-dashed border-amber-200 text-center">
+              <p className="text-amber-800 text-sm font-bold mb-4 italic">¿Te gusta el juego?</p>
+              <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#ffdd00] text-black px-6 py-3 rounded-xl font-black shadow-md hover:scale-105 transition-transform">
+                <Coffee size={20} /> INVITAME UN CAFECITO
+              </a>
+            </div>
           </div>
         )}
       </main>
 
-    {showRules && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-    <div className="bg-white p-8 rounded-[2.5rem] max-w-sm w-full relative overflow-y-auto max-h-[90vh] shadow-2xl">
-      <button onClick={() => setShowRules(false)} className="absolute top-6 right-6 text-slate-300 hover:text-slate-900 transition-colors">
-        <X size={24}/>
-      </button>
-      
-      {/* SECCIÓN 1: CÓMO JUGAR */}
-      <div className="mb-8">
-        <h3 className="text-2xl font-black mb-4 uppercase italic text-slate-900">¿Cómo jugar?</h3>
-        <p className="text-sm text-slate-600 mb-6 leading-tight">
-          Adiviná el equipo del día en <span className="font-bold text-black">5 intentos</span>. Con cada intento, los colores te dirán qué tan cerca estás:
-        </p>
-        
-        <div className="space-y-3">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 min-w-[40px] bg-green-600 rounded-xl flex items-center justify-center text-white font-bold">🟩</div>
-            <div className="text-sm">
-              <p className="font-bold text-black leading-none">Acierto total</p>
-              <p className="text-slate-500 text-xs">El dato coincide exactamente.</p>
+      {showRules && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+          <div className="bg-white p-8 rounded-[2.5rem] max-w-sm w-full relative overflow-y-auto max-h-[90vh]">
+            <button onClick={() => setShowRules(false)} className="absolute top-6 right-6 text-slate-300 hover:text-slate-900">
+              <X size={24}/>
+            </button>
+            
+            <h3 className="text-2xl font-black mb-4 uppercase italic">¿Cómo jugar?</h3>
+            <p className="text-sm text-slate-600 mb-6">Adiviná el club en <span className="text-black font-bold">5 intentos</span>. Los colores indican tu proximidad:</p>
+            
+            <div className="space-y-3 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 min-w-[40px] bg-green-600 rounded-xl flex items-center justify-center text-white">🟩</div>
+                <p className="text-xs text-slate-500"><b className="text-black">Acierto total:</b> El dato es correcto.</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 min-w-[40px] bg-yellow-500 rounded-xl flex items-center justify-center text-white">🟨</div>
+                <p className="text-xs text-slate-500"><b className="text-black">Parcial:</b> El club tiene este color (pero hay más).</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white">⬛</div>
+                <p className="text-xs text-slate-500"><b className="text-black">Incorrecto:</b> No hay coincidencia.</p>
+              </div>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 min-w-[40px] bg-yellow-500 rounded-xl flex items-center justify-center text-white font-bold">🟨</div>
-            <div className="text-sm">
-              <p className="font-bold text-black leading-none">Acierto parcial</p>
-              <p className="text-slate-500 text-xs">Hay coincidencia en algunos colores.</p>
+
+            <div className="h-[1px] bg-slate-100 w-full mb-6"></div>
+
+            <h3 className="text-xs font-black mb-4 uppercase tracking-widest text-slate-400">Aclaraciones</h3>
+            <div className="space-y-3 text-sm text-slate-600">
+              <p>🏆 <b className="text-black">Ligas:</b> Solo Primera División.</p>
+              <p>📅 <b className="text-black">Fundación:</b> Las flechas (↑↓) indican si el club es más viejo o nuevo.</p>
+              <p>🎨 <b className="text-black">Colores:</b> Identidad visual principal.</p>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white font-bold">⬛</div>
-            <div className="text-sm">
-              <p className="font-bold text-black leading-none">Sin coincidencias</p>
-              <p className="text-slate-500 text-xs">El dato es completamente distinto.</p>
-            </div>
+
+            <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="mt-8 flex items-center justify-center gap-2 text-amber-600 font-bold text-sm hover:underline">
+              <Coffee size={16} /> Apoyar este proyecto
+            </a>
+
+            <button onClick={() => setShowRules(false)} className={`w-full mt-4 ${uiColor} text-white py-4 rounded-2xl font-black uppercase italic`}>¡Entendido!</button>
           </div>
         </div>
-      </div>
-
-      <div className="h-[1px] bg-slate-100 w-full mb-8"></div>
-
-      {/* SECCIÓN 2: ACLARACIONES */}
-      <div>
-        <h3 className="text-xs font-black mb-4 uppercase tracking-[0.2em] text-slate-400">Aclaraciones</h3>
-        <div className="space-y-4 text-slate-600 text-sm">
-          <div className="flex gap-3">
-            <span className="text-lg">🏆</span>
-            <p><b className="text-black">Ligas:</b> Solo se cuentan títulos de Primera División Profesional.</p>
-          </div>
-          <div className="flex gap-3">
-            <span className="text-lg">📅</span>
-            <p><b className="text-black">Fundación:</b> Las flechas indican si el equipo buscado es más viejo (↑) o más nuevo (↓).</p>
-          </div>
-          <div className="flex gap-3">
-            <span className="text-lg">🎨</span>
-            <p><b className="text-black">Colores:</b> Se toman los colores más representativos de la identidad visual del club.</p>
-          </div>
-        </div>
-      </div>
-
-      <button 
-        onClick={() => setShowRules(false)} 
-        className={`w-full mt-8 ${uiColor} text-white py-4 rounded-2xl font-black shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase italic tracking-tighter`}
-      >
-        ¡Entendido!
-      </button>
-    </div>
-  </div>
-)}
+      )}
 
       <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[200px] h-14 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-4 border-b-4 border-black/20`}>
         <button onClick={() => setView("game")} className={view === 'game' ? 'text-white scale-110' : 'text-white/40'}><Home size={24}/></button>
