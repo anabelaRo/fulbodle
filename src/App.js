@@ -3,6 +3,7 @@ import { teams } from './data/teams';
 import GuessRow from './components/GuessRow';
 import Autocomplete from './components/Autocomplete';
 import { Trophy, History, Home, Share2, Info, X, Coffee } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 const LOSING_MESSAGES = [
   "La próxima pedí el VAR, capaz te dan por válida la respuesta.",
@@ -20,14 +21,17 @@ export default function App() {
   const [stats, setStats] = useState({ streak: 0, history: [] });
   const [showRules, setShowRules] = useState(false);
   const [loseMessage, setLoseMessage] = useState("");
+  const [seed, setSeed] = useState(0);
 
   const uiColor = "bg-[#4a5c4e]"; 
 
   useEffect(() => {
     const today = new Date();
     const dateKey = today.toISOString().slice(0, 10);
-    const seed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 100 + today.getDate();
-    const index = seed % teams.length;
+    const currentSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    setSeed(currentSeed);
+    
+    const index = currentSeed % teams.length;
     setTargetTeam(teams[index]);
 
     const savedStats = JSON.parse(localStorage.getItem('fg_stats')) || { streak: 0, history: [] };
@@ -78,6 +82,7 @@ export default function App() {
   };
 
   const shareResult = () => {
+    // Usamos ⬜ para representar gris/vacío en el compartido
     const emojiGrid = guesses.map(guess => {
       const pais = guess.pais === targetTeam.pais ? "🟩" : "⬜";
       const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬜";
@@ -93,7 +98,7 @@ export default function App() {
       ? `¡GOLAZO! Adiviné en ${guesses.length}/5 intentos ⚽` 
       : `FINAL DEL PARTIDO. No pude adivinar hoy ❌`;
 
-    const shareText = `Fulbodle ⚽\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.vercel.app/`;
+    const shareText = `Fulbodle #${seed}\n${mensajeResultado}\n\n${emojiGrid}\n\nhttps://fulbodle.vercel.app/`;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -107,9 +112,10 @@ export default function App() {
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col p-4 pb-32">
+      <Analytics />
       <header className="flex justify-between items-center py-6 px-2 text-white">
         <h1 className="text-3xl font-[900] tracking-tighter italic uppercase leading-none cursor-pointer"
-            onClick={() => { localStorage.clear(); window.location.reload(); }}>
+            onClick={() => window.location.reload()}>
           FULBO<span className="text-black/30 font-[900]">DLE</span>
         </h1>
         <div className="flex items-center gap-2 bg-black/20 px-4 py-2 rounded-full font-bold">
@@ -171,8 +177,12 @@ export default function App() {
                 </div>
               )).reverse()
             )}
-            
-           
+            <div className="mt-8 p-6 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200 text-center">
+                <p className="text-slate-500 text-sm font-bold mb-4 italic">¿Te gusta el proyecto?</p>
+                <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#ffdd00] text-black px-6 py-3 rounded-xl font-black shadow-md hover:scale-105 transition-transform">
+                    <Coffee size={20} /> INVITAME UN CAFECITO
+                </a>
+            </div>
           </div>
         )}
       </main>
@@ -189,16 +199,16 @@ export default function App() {
             
             <div className="space-y-3 mb-8">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 min-w-[40px] bg-green-600 rounded-xl flex items-center justify-center text-white">🟩</div>
-                <p className="text-xs text-slate-500"><b className="text-black">Acierto total:</b> El dato es correcto.</p>
+                <div className="w-10 h-10 min-w-[40px] bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-xs text-center">🟩</div>
+                <div className="text-sm"><p className="font-bold text-black leading-none text-xs">Acierto total</p><p className="text-slate-500 text-[10px]">El dato coincide perfectamente.</p></div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 min-w-[40px] bg-yellow-500 rounded-xl flex items-center justify-center text-white">🟨</div>
-                <p className="text-xs text-slate-500"><b className="text-black">Parcial:</b> El club tiene este color (pero hay más).</p>
+                <div className="w-10 h-10 min-w-[40px] bg-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-xs text-center">🟨</div>
+                <div className="text-sm"><p className="font-bold text-black leading-none text-xs">Acierto parcial</p><p className="text-slate-500 text-[10px]">Coincidencia en algunos colores.</p></div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white">⬜</div>
-                <p className="text-xs text-slate-500"><b className="text-black">Incorrecto:</b> No hay coincidencia.</p>
+                <div className="w-10 h-10 min-w-[40px] bg-slate-300 rounded-xl flex items-center justify-center text-white font-bold text-xs text-center">⬜</div>
+                <div className="text-sm"><p className="font-bold text-black leading-none text-xs">Sin coincidencias</p><p className="text-slate-500 text-[10px]">El dato es completamente distinto.</p></div>
               </div>
             </div>
 
@@ -206,48 +216,21 @@ export default function App() {
 
             <h3 className="text-xs font-black mb-4 uppercase tracking-widest text-slate-400">Aclaraciones</h3>
             <div className="space-y-3 text-sm text-slate-600">
-              <p>🏆 <b className="text-black">Ligas:</b> Solo Primera División.</p>
-              <p>📅 <b className="text-black">Fundación:</b> Las flechas (↑↓) indican si el club es más viejo o nuevo.</p>
-              <p>🎨 <b className="text-black">Colores:</b> Identidad visual principal.</p>
+              <p>🏆 <b className="text-black">Ligas:</b> Solo Primera División Profesional. Las flechas indican si el club ganó + (↑) o - (↓)</p>
+              <p>📅 <b className="text-black">Fundación:</b> Las flechas indican si el club es más viejo (↑) o nuevo (↓).</p>
+              <p>🎨 <b className="text-black">Colores:</b> Se comparan los colores de identidad principal.</p>
             </div>
 
-            <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="mt-8 flex items-center justify-center gap-2 text-amber-600 font-bold text-sm hover:underline">
-              <Coffee size={16} /> Apoyar este proyecto
-            </a>
-
-            <button onClick={() => setShowRules(false)} className={`w-full mt-4 ${uiColor} text-white py-4 rounded-2xl font-black uppercase italic`}>¡Entendido!</button>
+            <button onClick={() => setShowRules(false)} className={`w-full mt-8 ${uiColor} text-white py-4 rounded-2xl font-black uppercase italic shadow-lg active:scale-95 transition-all`}>¡Entendido!</button>
           </div>
         </div>
       )}
 
-     <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[240px] h-14 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-4 border-b-4 border-black/20 z-40`}>
-      {/* 1. Botón Home (Izquierda) */}
-      <button 
-        onClick={() => setView("game")} 
-        className={`${view === 'game' ? 'text-white scale-110' : 'text-white/40'} transition-all duration-200`}
-      >
-        <Home size={24}/>
-      </button>
-    
-      {/* 2. Botón Historial (Centro) */}
-      <button 
-        onClick={() => setView("history")} 
-        className={`${view === 'history' ? 'text-white scale-110' : 'text-white/40'} transition-all duration-200`}
-      >
-        <History size={24}/>
-      </button>
-    
-      {/* 3. Botón Cafecito (Derecha) */}
-      <a 
-        href="https://cafecito.app/anabelaro" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="text-white/40 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95"
-        title="Invitame un Cafecito"
-      >
-        <Coffee size={24} />
-      </a>
-    </nav>
+      <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[240px] h-14 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-4 border-b-4 border-black/20 z-40`}>
+        <button onClick={() => setView("game")} className={`${view === 'game' ? 'text-white scale-110' : 'text-white/40'} transition-all`}><Home size={24}/></button>
+        <button onClick={() => setView("history")} className={`${view === 'history' ? 'text-white scale-110' : 'text-white/40'} transition-all`}><History size={24}/></button>
+        <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-all hover:scale-110 active:scale-95" title="Invitame un Cafecito"><Coffee size={24} /></a>
+      </nav>
     </div>
   );
 }
