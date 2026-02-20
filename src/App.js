@@ -113,7 +113,8 @@ export default function App() {
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col p-4 pb-32">
       <Analytics />
-      <header className="flex justify-between items-center py-6 px-2 text-white">
+     <header className="flex flex-col py-6 px-2 text-white">
+      <div className="flex justify-between items-center w-full">
         <h1 className="text-3xl font-[900] tracking-tighter italic uppercase leading-none cursor-pointer"
             onClick={() => window.location.reload()}>
           FULBO<span className="text-black/30 font-[900]">DLE</span>
@@ -122,10 +123,13 @@ export default function App() {
           <Trophy size={18} className="text-amber-400" />
           <span>{stats.streak}</span>
         </div>
-       <p className="text-[11px] mt-2 font-medium text-white/60 italic leading-tight max-w-[250px]">
-       Un equipo secreto cada día, cinco intentos:  ¿Podes sacarlo?
-       </p>
-      </header>
+      </div>
+      
+      {/* TU LEYENDA PERSONALIZADA */}
+      <p className="text-[11px] mt-2 font-medium text-white/60 italic leading-tight">
+        Un equipo secreto cada día, cinco intentos. <span className="text-white font-bold not-italic">¿Podes sacarlo?</span>
+      </p>
+    </header>
 
       <main className="main-container flex-grow p-6">
         {view === "game" ? (
