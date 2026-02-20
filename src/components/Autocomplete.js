@@ -1,28 +1,65 @@
 import React, { useState } from 'react';
+import { Search } from 'lucide-react';
 
-export default function Autocomplete({ suggestions, onSelect, disabled }) {
-  const [query, setQuery] = useState("");
-  const [list, setList] = useState([]);
+const Autocomplete = ({ suggestions, onSelect, disabled, uiColor }) => {
+  const [filtered, setFiltered] = useState([]);
+  const [input, setInput] = useState("");
+  const [show, setShow] = useState(false);
 
-  const handleInput = (e) => {
-    setQuery(e.target.value);
-    setList(e.target.value.length > 1 ? suggestions.filter(s => s.nombre.toLowerCase().includes(e.target.value.toLowerCase())).slice(0,5) : []);
+  const onChange = (e) => {
+    const value = e.target.value;
+    setInput(value);
+    if (value.length > 1) {
+      const filteredSuggestions = suggestions.filter(
+        suggestion => suggestion.nombre.toLowerCase().includes(value.toLowerCase())
+      );
+      setFiltered(filteredSuggestions);
+      setShow(true);
+    } else {
+      setShow(false);
+    }
+  };
+
+  const onClick = (suggestion) => {
+    onSelect(suggestion);
+    setInput("");
+    setShow(false);
   };
 
   return (
     <div className="relative w-full">
-      <input className="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 focus:border-emerald-500 outline-none transition-all"
-        placeholder="Adivina el equipo..." value={query} onChange={handleInput} disabled={disabled} />
-      {list.length > 0 && (
-        <div className="absolute w-full mt-2 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-2xl z-50">
-          {list.map(t => (
-            <div key={t.id} onClick={() => { onSelect(t); setQuery(""); setList([]); }} 
-              className="p-4 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0">
-              {t.nombre} <span className="text-xs text-slate-500 italic">({t.pais})</span>
-            </div>
-          ))}
-        </div>
+      <div className="relative flex items-center">
+        <Search className="absolute left-4 text-white/50" size={18} />
+        <input
+          type="text"
+          className={`w-full py-4 pl-12 pr-4 ${uiColor} text-white placeholder:text-white/40 rounded-2xl border-b-4 border-black/20 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all font-bold disabled:opacity-50`}
+          placeholder="Escribe el nombre de un club..."
+          onChange={onChange}
+          value={input}
+          disabled={disabled}
+        />
+      </div>
+
+      {show && input && (
+        <ul className={`absolute z-[60] w-full mt-2 ${uiColor} border-2 border-white/10 rounded-2xl shadow-2xl max-h-60 overflow-y-auto`}>
+          {filtered.length > 0 ? (
+            filtered.map((suggestion, index) => (
+              <li
+                key={index}
+                className="px-6 py-4 hover:bg-white/10 cursor-pointer text-white font-bold border-b border-white/5 last:border-0 flex justify-between items-center"
+                onClick={() => onClick(suggestion)}
+              >
+                <span>{suggestion.nombre}</span>
+                <span className="text-[10px] opacity-40 uppercase">{suggestion.pais}</span>
+              </li>
+            ))
+          ) : (
+            <li className="px-6 py-4 text-white/50 italic text-sm font-medium">No se encontraron equipos...</li>
+          )}
+        </ul>
       )}
     </div>
   );
-}
+};
+
+export default Autocomplete;
