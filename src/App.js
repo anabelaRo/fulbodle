@@ -174,20 +174,77 @@ const shareResult = () => {
         )}
       </main>
 
-      {showRules && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-[2.5rem] max-w-sm w-full relative">
-            <button onClick={() => setShowRules(false)} className="absolute top-6 right-6 text-slate-300 hover:text-slate-900"><X size={24}/></button>
-            <h3 className="text-2xl font-black mb-6 uppercase italic">Aclaraciones</h3>
-            <div className="space-y-4 text-slate-600 text-sm font-medium">
-              <p>🏆 <b className="text-black">Ligas:</b> Solo Primera División Profesional.</p>
-              <p>📅 <b className="text-black">Fundación:</b> Año de registro oficial.</p>
-              <p>🎨 <b className="text-black">Colores:</b> Identidad visual principal.</p>
+    {showRules && (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+    <div className="bg-white p-8 rounded-[2.5rem] max-w-sm w-full relative overflow-y-auto max-h-[90vh] shadow-2xl">
+      <button onClick={() => setShowRules(false)} className="absolute top-6 right-6 text-slate-300 hover:text-slate-900 transition-colors">
+        <X size={24}/>
+      </button>
+      
+      {/* SECCIÓN 1: CÓMO JUGAR */}
+      <div className="mb-8">
+        <h3 className="text-2xl font-black mb-4 uppercase italic text-slate-900">¿Cómo jugar?</h3>
+        <p className="text-sm text-slate-600 mb-6 leading-tight">
+          Adiviná el equipo del día en <span className="font-bold text-black">5 intentos</span>. Con cada intento, los colores te dirán qué tan cerca estás:
+        </p>
+        
+        <div className="space-y-3">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 min-w-[40px] bg-green-600 rounded-xl flex items-center justify-center text-white font-bold">🟩</div>
+            <div className="text-sm">
+              <p className="font-bold text-black leading-none">Acierto total</p>
+              <p className="text-slate-500 text-xs">El dato coincide exactamente.</p>
             </div>
-            <button onClick={() => setShowRules(false)} className={`w-full mt-8 ${uiColor} text-white py-4 rounded-2xl font-black`}>ENTENDIDO</button>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 min-w-[40px] bg-yellow-500 rounded-xl flex items-center justify-center text-white font-bold">🟨</div>
+            <div className="text-sm">
+              <p className="font-bold text-black leading-none">Acierto parcial</p>
+              <p className="text-slate-500 text-xs">Hay coincidencia en algunos colores.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 min-w-[40px] bg-zinc-800 rounded-xl flex items-center justify-center text-white font-bold">⬛</div>
+            <div className="text-sm">
+              <p className="font-bold text-black leading-none">Sin coincidencias</p>
+              <p className="text-slate-500 text-xs">El dato es completamente distinto.</p>
+            </div>
           </div>
         </div>
-      )}
+      </div>
+
+      <div className="h-[1px] bg-slate-100 w-full mb-8"></div>
+
+      {/* SECCIÓN 2: ACLARACIONES */}
+      <div>
+        <h3 className="text-xs font-black mb-4 uppercase tracking-[0.2em] text-slate-400">Aclaraciones</h3>
+        <div className="space-y-4 text-slate-600 text-sm">
+          <div className="flex gap-3">
+            <span className="text-lg">🏆</span>
+            <p><b className="text-black">Ligas:</b> Solo se cuentan títulos de Primera División Profesional.</p>
+          </div>
+          <div className="flex gap-3">
+            <span className="text-lg">📅</span>
+            <p><b className="text-black">Fundación:</b> Las flechas indican si el equipo buscado es más viejo (↑) o más nuevo (↓).</p>
+          </div>
+          <div className="flex gap-3">
+            <span className="text-lg">🎨</span>
+            <p><b className="text-black">Colores:</b> Se toman los colores más representativos de la identidad visual del club.</p>
+          </div>
+        </div>
+      </div>
+
+      <button 
+        onClick={() => setShowRules(false)} 
+        className={`w-full mt-8 ${uiColor} text-white py-4 rounded-2xl font-black shadow-lg hover:brightness-110 active:scale-95 transition-all uppercase italic tracking-tighter`}
+      >
+        ¡Entendido!
+      </button>
+    </div>
+  </div>
+)}
 
       <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[200px] h-14 ${uiColor} rounded-full flex justify-around items-center shadow-2xl px-4 border-b-4 border-black/20`}>
         <button onClick={() => setView("game")} className={view === 'game' ? 'text-white scale-110' : 'text-white/40'}><Home size={24}/></button>
