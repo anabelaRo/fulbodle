@@ -1,5 +1,5 @@
 export const teams = [
-  { id: 104, nombre: "Manchester United", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Rojo"], palmares: 20, fundacion: 1878 },
+ { id: 21, nombre: "Barracas Central", pais: "Argentina", federacion: "CONMEBOL", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 0, fundacion: 1904 },
   { id: 216, nombre: "Hellas Verona", pais: "Italia", federacion: "UEFA", categoria: 1, colores: ["Azul", "Amarillo"], palmares: 1, fundacion: 1903 },
   { id: 25, nombre: "Sarmiento", pais: "Argentina", federacion: "CONMEBOL", categoria: 1, colores: ["Verde"], palmares: 0, fundacion: 1911 },
   { id: 109, nombre: "Brighton", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Azul", "Blanco"], palmares: 0, fundacion: 1901 },
@@ -19,7 +19,7 @@ export const teams = [
   { id: 101, nombre: "Arsenal", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 13, fundacion: 1886 },
   { id: 16, nombre: "Argentinos Juniors", pais: "Argentina", federacion: "CONMEBOL", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 3, fundacion: 1904 },
   { id: 115, nombre: "Nottingham Forest", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Rojo"], palmares: 1, fundacion: 1865 },
-  { id: 21, nombre: "Barracas Central", pais: "Argentina", federacion: "CONMEBOL", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 0, fundacion: 1904 },
+  { id: 104, nombre: "Manchester United", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Rojo"], palmares: 20, fundacion: 1878 },
   { id: 157, nombre: "Girona", pais: "España", federacion: "UEFA", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 0, fundacion: 1930 },
   { id: 45, nombre: "Defensores de Belgrano", pais: "Argentina", federacion: "CONMEBOL", categoria: 2, colores: ["Rojo", "Negro"], palmares: 0, fundacion: 1906 },
   { id: 118, nombre: "Sunderland", pais: "Inglaterra", federacion: "UEFA", categoria: 1, colores: ["Rojo", "Blanco"], palmares: 6, fundacion: 1879 },
