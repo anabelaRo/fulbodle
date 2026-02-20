@@ -172,12 +172,7 @@ export default function App() {
               )).reverse()
             )}
             
-            <div className="mt-8 p-6 bg-amber-50 rounded-[2rem] border-2 border-dashed border-amber-200 text-center">
-              <p className="text-amber-800 text-sm font-bold mb-4 italic">¿Te gusta el juego?</p>
-              <a href="https://cafecito.app/anabelaro" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#ffdd00] text-black px-6 py-3 rounded-xl font-black shadow-md hover:scale-105 transition-transform">
-                <Coffee size={20} /> INVITAME UN CAFECITO
-              </a>
-            </div>
+           
           </div>
         )}
       </main>
