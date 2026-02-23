@@ -25,25 +25,34 @@ export default function App() {
 
   const uiColor = "bg-[#4a5c4e]"; 
 
-  useEffect(() => {
+    useEffect(() => {
     const today = new Date();
-    const dateKey = today.toISOString().slice(0, 10);
+    // Usamos el seed como identificador único del día en lugar de la fecha ISO
     const currentSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
     setSeed(currentSeed);
     
     const index = currentSeed % teams.length;
-    setTargetTeam(teams[index]);
+    const todayTeam = teams[index];
+    setTargetTeam(todayTeam);
 
     const savedStats = JSON.parse(localStorage.getItem('fg_stats')) || { streak: 0, history: [] };
     setStats(savedStats);
 
     const savedGame = JSON.parse(localStorage.getItem('fg_current_game'));
-    if (savedGame && savedGame.date === dateKey) {
+    
+    // CORRECCIÓN: Validamos contra el SEED y el ID del equipo
+    if (savedGame && savedGame.seed === currentSeed && savedGame.targetId === todayTeam.id) {
       setGuesses(savedGame.guesses);
       setGameStatus(savedGame.status);
       if (savedGame.status === "lost") {
         setLoseMessage(savedGame.msg || LOSING_MESSAGES[0]);
       }
+    } else {
+      // Si el seed no coincide, es un nuevo día: limpiamos el juego actual
+      setGuesses([]);
+      setGameStatus("playing");
+      setLoseMessage("");
+      localStorage.removeItem('fg_current_game');
     }
   }, []);
 
@@ -66,15 +75,22 @@ export default function App() {
     if (newStatus !== "playing") {
       const newStats = {
         streak: newStatus === "won" ? stats.streak + 1 : 0,
-        history: [...stats.history, { team: targetTeam.nombre, result: newStatus, date: new Date().toLocaleDateString() }]
+        history: [...stats.history, { 
+          team: targetTeam.nombre, 
+          result: newStatus, 
+          date: new Date().toLocaleDateString() 
+        }]
       };
       setStats(newStats);
       localStorage.setItem('fg_stats', JSON.stringify(newStats));
     }
 
     setGameStatus(newStatus);
+    
+    // Guardamos el SEED y el ID del equipo para validar al recargar
     localStorage.setItem('fg_current_game', JSON.stringify({
-      date: new Date().toISOString().slice(0, 10),
+      seed: seed,
+      targetId: targetTeam.id,
       guesses: newGuesses,
       status: newStatus,
       msg: selectedMsg
@@ -82,7 +98,6 @@ export default function App() {
   };
 
   const shareResult = () => {
-    // Usamos ⬜ para representar gris/vacío en el compartido
     const emojiGrid = guesses.map(guess => {
       const pais = guess.pais === targetTeam.pais ? "🟩" : "⬜";
       const fed = guess.federacion === targetTeam.federacion ? "🟩" : "⬜";
@@ -109,6 +124,7 @@ export default function App() {
       alert("¡Resultado copiado al portapapeles! 📋");
     }
   };
+
 
   return (
     <div className="max-w-md mx-auto min-h-screen flex flex-col p-4 pb-32">
